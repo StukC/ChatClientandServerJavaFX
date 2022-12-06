@@ -7,24 +7,19 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<AnchorPane fx:id="ap_main" fx:controller="com.example.chatclient.Controller"
-            prefHeight="396" prefWidth="478"
-            xmlns:fx="http://javafx.com/fxml">
+
+<AnchorPane fx:id="ap_main" prefHeight="396" prefWidth="478" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/19" fx:controller="com.example.chatclient.Controller">
     <children>
-        <Button fx:id="button_send" layoutX="404" layoutY="338" text="send" />
-        <TextField fx:id="tf_message" layoutX="30" layoutY="338"
-                   prefWidth="361" prefHeight="26"/>
-        <ScrollPane fx:id="sp_main" layoutY="70" layoutX="30"
-                    prefHeight="256" prefWidth="418" fitToWidth="true">
+        <Button fx:id="buttonSend" layoutX="404" layoutY="338" text="send" />
+        <TextField fx:id="field" layoutX="30" layoutY="338" prefHeight="26" prefWidth="361" />
+        <ScrollPane fx:id="pane" fitToWidth="true" layoutX="30" layoutY="70" prefHeight="256" prefWidth="418">
             <content>
-                <VBox fx:id="vboxMessages" prefHeight="248"
-                      prefWidth="412"/>
+                <VBox fx:id="vboxMessages" prefHeight="248" prefWidth="412" />
             </content>
         </ScrollPane>
-        <Label
-                text = "Chase's Messenger">
+        <Label layoutX="130.0" layoutY="28.0" text="Chase's Messenger">
             <font>
-                <Font name="Arial Rounded MT Bold" size = "23"></Font>
+                <Font name="Arial Rounded MT Bold" size="23" />
             </font>>
         </Label>
     </children>

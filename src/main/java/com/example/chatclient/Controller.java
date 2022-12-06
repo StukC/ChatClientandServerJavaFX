@@ -23,69 +23,76 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
+
+    //Inject widgets
     @FXML
     private Label labelBox;
     @FXML
-    private ScrollPane sp_main;
+    private ScrollPane pane;
     @FXML
-    private Button button_send;
+    private Button buttonSend;
     @FXML
-    private TextField tf_message;
+    private TextField field;
     @FXML
     private VBox vboxMessages;
 
     private Client client;
 
+
+    //Initialize to connect to server localhost with port 4444
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
-            client = new Client(new Socket("localhost", 1234));
+            client = new Client(new Socket("localhost", 4444));
             System.out.println("Connected to Server");
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("error connecting to server");
         }
 
         vboxMessages.heightProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number newValue) {
-                sp_main.setVvalue((Double) newValue);
+                pane.setVvalue((Double) newValue);
             }
         });
-        client.receiveMessageFromServer(vboxMessages);
+        client.msgFromServer(vboxMessages);
 
-        button_send.setOnAction(new EventHandler<ActionEvent>() {
+
+        //Button Action method
+        buttonSend.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                String messageToSend = tf_message.getText();
+                String messageToSend = field.getText();
                 if (!messageToSend.isEmpty()) {
+                    //Align to the right for sending message
                     HBox hBox = new HBox();
                     hBox.setAlignment(Pos.CENTER_RIGHT);
-
+                    // fun colors similar to a certain company :)
                     hBox.setPadding(new Insets(5,5,5,10));
-                    Text text = new Text(messageToSend);
-                    TextFlow textFlow = new TextFlow(text);
-                    textFlow.setStyle("-fx-color: rgb(240,240,255);" +
+                    Text newText = new Text(("You: ") + (messageToSend));
+                    TextFlow newTextFlow = new TextFlow(newText);
+                    newText.setFill(Color.color(.934,.945,.996));
+                    newTextFlow.setPadding((new Insets(5,10,5,10)));
+                    newTextFlow.setStyle("-fx-color: rgb(240,240,255);" +
                             "-fx-background-color: rgb(15,125,240);" +
                             "-fx-background-radius: 20px;");
-
-                    textFlow.setPadding((new Insets(5,10,5,10)));
-                    text.setFill(Color.color(.934,.945,.996));
-
-                    hBox.getChildren().add(textFlow);
+                    hBox.getChildren().add(newTextFlow);
+                    //add to GUI and clear
                     vboxMessages.getChildren().add(hBox);
-
-                    client.sendMessageToServer(messageToSend);
-                    tf_message.clear();
+                    client.sendMessageToServer(("Friend: ")+(messageToSend));
+                    System.out.println(messageToSend);
+                    field.clear();
                 }
             }
         });
     }
 
+    //show on gui method
     public static void addLabel(String messageFromServer, VBox vBox) {
         HBox hBox = new HBox();
         hBox.setAlignment(Pos.CENTER_LEFT);
         hBox.setPadding(new Insets(5,5,5,10));
-
         Text text = new Text(messageFromServer);
         TextFlow textFlow = new TextFlow(text);
         textFlow.setStyle("-fx-background-color: rgb(230,230,240);" +
@@ -93,6 +100,7 @@ public class Controller implements Initializable {
         textFlow.setPadding(new Insets(5,10,5,10));
         hBox.getChildren().add(textFlow);
 
+        //We have to do this for a new thread
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -100,4 +108,4 @@ public class Controller implements Initializable {
             }
         });
     }
-    }
+}
